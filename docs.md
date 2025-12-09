@@ -1,0 +1,5 @@
+- model은 Infra를 몰라야함
+- /api에 query, dto, mapper 이동
+- query key 팩토리 방식 사용.
+- post.all(), post.lists(), post.list(filter), post.details(), post.detail()
+- 복합 모델 도메인 사용 /entities/posts -> /entities/post-user(PostWithUser) --
