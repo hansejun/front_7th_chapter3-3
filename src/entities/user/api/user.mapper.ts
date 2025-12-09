@@ -1,6 +1,6 @@
 import { PaginatedData } from "@shared/model/response.interface"
 import type { UserDto, AddressDto, CompanyDto, UsersResponseDto } from "./user.dto"
-import type { User, Address, Company } from "./user.interface"
+import type { User, Address, Company } from "../model/user.interface"
 
 const toAddress = (dto: AddressDto | undefined): Address | null => {
   if (!dto) return null

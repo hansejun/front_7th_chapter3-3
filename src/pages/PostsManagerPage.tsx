@@ -1,23 +1,17 @@
 import { useEffect, useState } from "react"
 import { Edit2, MessageSquare, Plus, Search, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
-import { Button } from "../shared/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "../shared/ui/card"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "../shared/ui/dialog"
-import { Input } from "../shared/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../shared/ui/select"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../shared/ui/table"
-import { Textarea } from "../shared/ui/textarea"
+import { Button } from "@shared/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@shared/ui/card"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dialog"
+import { Input } from "@shared/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@shared/ui/select"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@shared/ui/table"
+import { Textarea } from "@shared/ui/textarea"
 
-// Types
-import type { User } from "../entities/user"
-import type { Comment, CreateCommentDto } from "../entities/comment"
+import { userService, type User } from "@entities/user"
+import { commentService, type Comment, CreateCommentRequestDto } from "@entities/comment"
 import { CreatePostRequestDto, Post, postService, Tag } from "@entities/post"
-
-// API functions
-
-import * as userApi from "../entities/user/api/user.service"
-import * as commentApi from "../entities/comment/api/comment.service"
 
 const PostsManager = () => {
   const navigate = useNavigate()
@@ -41,7 +35,7 @@ const PostsManager = () => {
   const [selectedTag, setSelectedTag] = useState<string>(queryParams.get("tag") || "")
   const [comments, setComments] = useState<Record<number, Comment[]>>({})
   const [selectedComment, setSelectedComment] = useState<Comment | null>(null)
-  const [newComment, setNewComment] = useState<CreateCommentDto>({ body: "", postId: null, userId: 1 })
+  const [newComment, setNewComment] = useState<CreateCommentRequestDto>({ body: "", postId: null, userId: 1 })
   const [showAddCommentDialog, setShowAddCommentDialog] = useState<boolean>(false)
   const [showEditCommentDialog, setShowEditCommentDialog] = useState<boolean>(false)
   const [showPostDetailDialog, setShowPostDetailDialog] = useState<boolean>(false)
@@ -66,12 +60,12 @@ const PostsManager = () => {
     try {
       const [postsData, usersData] = await Promise.all([
         postService.getPosts(skip, limit),
-        userApi.fetchUsers({ limit: 0, select: "username,image" }),
+        userService.getUsers({ limit: 0, select: "username,image" }),
       ])
 
       const postsWithUsers = postsData.data.map((post) => ({
         ...post,
-        author: usersData.users.find((user) => user.id === post.userId),
+        author: usersData.data.find((user) => user.id === post.userId) || null,
       }))
       setPosts(postsWithUsers)
       setTotal(postsData.total)
@@ -120,12 +114,12 @@ const PostsManager = () => {
     try {
       const [postsData, usersData] = await Promise.all([
         postService.getPostsByTag(tag),
-        userApi.fetchUsers({ limit: 0, select: "username,image" }),
+        userService.getUsers({ limit: 0, select: "username,image" }),
       ])
 
       const postsWithUsers = postsData.data.map((post) => ({
         ...post,
-        author: usersData.users.find((user) => user.id === post.userId),
+        author: usersData.data.find((user) => user.id === post.userId),
       }))
 
       setPosts(postsWithUsers)
@@ -175,8 +169,8 @@ const PostsManager = () => {
   const fetchComments = async (postId: number) => {
     if (comments[postId]) return // 이미 불러온 댓글이 있으면 다시 불러오지 않음
     try {
-      const data = await commentApi.fetchCommentsByPost(postId)
-      setComments((prev) => ({ ...prev, [postId]: data.comments }))
+      const data = await commentService.getCommentsByPost(postId)
+      setComments((prev) => ({ ...prev, [postId]: data.data }))
     } catch (error) {
       console.error("댓글 가져오기 오류:", error)
     }
@@ -185,7 +179,7 @@ const PostsManager = () => {
   // 댓글 추가
   const addComment = async () => {
     try {
-      const data = await commentApi.createComment(newComment)
+      const data = await commentService.createComment(newComment)
       setComments((prev) => ({
         ...prev,
         [data.postId]: [...(prev[data.postId] || []), data],
@@ -201,7 +195,7 @@ const PostsManager = () => {
   const updateComment = async () => {
     if (!selectedComment) return
     try {
-      const data = await commentApi.updateComment(selectedComment.id, selectedComment.body)
+      const data = await commentService.updateComment(selectedComment.id, selectedComment.body)
       setComments((prev) => ({
         ...prev,
         [data.postId]: prev[data.postId].map((comment) => (comment.id === data.id ? data : comment)),
@@ -215,7 +209,7 @@ const PostsManager = () => {
   // 댓글 삭제
   const deleteComment = async (id: number, postId: number) => {
     try {
-      await commentApi.deleteComment(id)
+      await commentService.deleteComment(id)
       setComments((prev) => ({
         ...prev,
         [postId]: prev[postId].filter((comment) => comment.id !== id),
@@ -231,7 +225,7 @@ const PostsManager = () => {
       const currentComment = comments[postId].find((c) => c.id === id)
       if (!currentComment) return
 
-      const data = await commentApi.likeComment(id, currentComment.likes + 1)
+      const data = await commentService.likeComment(id, currentComment.likes + 1)
       setComments((prev) => ({
         ...prev,
         [postId]: prev[postId].map((comment) =>
@@ -253,7 +247,7 @@ const PostsManager = () => {
   // 사용자 모달 열기
   const openUserModal = async (user: User) => {
     try {
-      const userData = await userApi.fetchUserById(user.id)
+      const userData = await userService.getUserById(user.id)
       setSelectedUser(userData)
       setShowUserModal(true)
     } catch (error) {

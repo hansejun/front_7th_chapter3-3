@@ -5,5 +5,6 @@ export type {
   CreateCommentRequestDto,
   UpdateCommentRequestDto,
   CommentListResponseDto,
-} from "./model/comment.dto"
+} from "./api/comment.dto"
 export { commentMapper } from "./model/comment.mapper"
+export { commentService } from "./api/comment.service"

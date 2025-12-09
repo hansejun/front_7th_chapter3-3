@@ -1,7 +1,7 @@
 import { apiInstance } from "@shared/api/instance"
-import type { CommentDto, CommentListResponseDto, CreateCommentRequestDto } from "../model/comment.dto"
+import type { CommentDto, CommentListResponseDto, CreateCommentRequestDto } from "./comment.dto"
 import type { Comment } from "../model/comment.interface"
-import { commentMapper } from "../model/comment.mapper"
+import { commentMapper } from "./comment.mapper"
 import { PaginatedData } from "@shared/model/response.interface"
 
 // 특정 게시물의 댓글 목록 조회

@@ -1,8 +1,8 @@
 import { apiInstance } from "@shared/api/instance"
-import type { UserDto, UsersResponseDto } from "../model/user.dto"
+import type { UserDto, UsersResponseDto } from "./user.dto"
 import { PaginatedData } from "@shared/model/response.interface"
 import { User } from "../model/user.interface"
-import { userMapper } from "../model/user.mapper"
+import { userMapper } from "./user.mapper"
 
 // 사용자 목록 조회
 const getUsers = async (params?: { limit?: number; skip?: number; select?: string }): Promise<PaginatedData<User>> => {

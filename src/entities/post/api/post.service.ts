@@ -1,8 +1,8 @@
 import { PaginatedData } from "@shared/model/response.interface"
 import { apiInstance } from "../../../shared/api/instance"
-import { CreatePostRequestDto, PostDto, PostListResponseDto, TagDto, UpdatePostRequestDto } from "../model/post.dto"
+import { CreatePostRequestDto, PostDto, PostListResponseDto, TagDto, UpdatePostRequestDto } from "./post.dto"
 import { Post, Tag } from "../model/post.interface"
-import { postMapper } from "../model/post.mapper"
+import { postMapper } from "./post.mapper"
 
 // 게시물 목록 조회
 const getPosts = async (skip: number, limit: number): Promise<PaginatedData<Post>> => {
