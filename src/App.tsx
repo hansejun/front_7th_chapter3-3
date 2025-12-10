@@ -1,7 +1,8 @@
 import { BrowserRouter as Router } from "react-router-dom"
 import Header from "@widgets/header.ui"
 import Footer from "@widgets/footer.ui"
-import PostsManagerPage from "@pages/PostsManagerPage"
+import PostsManagerPage from "@pages/home"
+import { ModalRoot } from "@shared/store/modal/modal-root"
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
         </main>
         <Footer />
       </div>
+      <ModalRoot />
     </Router>
   )
 }
