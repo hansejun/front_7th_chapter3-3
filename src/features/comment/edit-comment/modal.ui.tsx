@@ -1,16 +1,23 @@
-import { Comment } from "@entities/comment"
+import { Comment, UpdateCommentRequestDto } from "@entities/comment"
 import { Button } from "@shared/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dialog"
 import { Textarea } from "@shared/ui/textarea"
 import { BaseModalProps } from "@shared/store/modal/types"
+import { useState } from "react"
 
 interface EditCommentModalProps extends BaseModalProps {
   comment: Comment
-  onCommentChange: (comment: Comment) => void
-  onUpdate: () => void
 }
 
-export const EditCommentModal = ({ onCloseModal, comment, onCommentChange, onUpdate }: EditCommentModalProps) => {
+export const EditCommentModal = ({ onCloseModal, comment }: EditCommentModalProps) => {
+  const [editedComment, setEditedComment] = useState<UpdateCommentRequestDto>({
+    id: comment.id,
+    body: comment.body,
+  })
+
+  const handleUpdateComment = () => {
+    // updateComment(editedComment)
+  }
   return (
     <Dialog open onOpenChange={onCloseModal}>
       <DialogContent>
@@ -21,9 +28,9 @@ export const EditCommentModal = ({ onCloseModal, comment, onCommentChange, onUpd
           <Textarea
             placeholder="댓글 내용"
             value={comment.body || ""}
-            onChange={(e) => onCommentChange({ ...comment, body: e.target.value })}
+            onChange={(e) => setEditedComment({ ...editedComment, body: e.target.value })}
           />
-          <Button onClick={onUpdate}>댓글 업데이트</Button>
+          <Button onClick={handleUpdateComment}>댓글 업데이트</Button>
         </div>
       </DialogContent>
     </Dialog>

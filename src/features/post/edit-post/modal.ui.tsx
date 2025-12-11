@@ -13,15 +13,20 @@ interface EditPostModalProps extends BaseModalProps {
 
 export const EditPostModal = ({ onCloseModal, post }: EditPostModalProps) => {
   const [editedPost, setEditedPost] = useState(post)
-  const editPostMutation = useEditPost()
+  const { mutate: updatePost } = useEditPost()
 
   const handleUpdate = async () => {
-    try {
-      await editPostMutation.mutateAsync({ id: editedPost.id, data: editedPost })
-      onCloseModal()
-    } catch (error) {
-      console.error("게시물 업데이트 오류:", error)
-    }
+    updatePost(
+      { id: editedPost.id, data: editedPost },
+      {
+        onSuccess: () => {
+          onCloseModal()
+        },
+        onError: (error) => {
+          console.error("게시물 업데이트 오류:", error)
+        },
+      },
+    )
   }
   return (
     <Dialog open onOpenChange={onCloseModal}>

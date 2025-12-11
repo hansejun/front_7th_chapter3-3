@@ -1,1 +1,1 @@
-export { useDeletePost } from "./use-delete-post.hook"
+export { DeletePostButton } from "./delete-post-button.ui"

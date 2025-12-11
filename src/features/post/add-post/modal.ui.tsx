@@ -4,14 +4,29 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dia
 import { Input } from "@shared/ui/input"
 import { Textarea } from "@shared/ui/textarea"
 import { BaseModalProps } from "@shared/store/modal/types"
+import { useState } from "react"
+import { useAddPost } from "./use-add-post.hook"
 
-interface AddPostModalProps extends BaseModalProps {
-  newPost: CreatePostRequestDto
-  setNewPost: (newPost: CreatePostRequestDto) => void
-  onAddPost: () => void
-}
+export const AddPostModal = ({ onCloseModal }: BaseModalProps) => {
+  const [newPost, setNewPost] = useState<CreatePostRequestDto>({
+    title: "",
+    body: "",
+    userId: 1,
+  })
 
-export const AddPostModal = ({ onCloseModal, newPost, setNewPost, onAddPost }: AddPostModalProps) => {
+  const { mutate: addPost } = useAddPost()
+
+  const handleAddPost = async () => {
+    addPost(newPost, {
+      onSuccess: () => {
+        onCloseModal()
+      },
+      onError: (error) => {
+        console.error("게시물 추가 오류:", error)
+      },
+    })
+  }
+
   return (
     <Dialog open onOpenChange={onCloseModal}>
       <DialogContent>
@@ -36,7 +51,7 @@ export const AddPostModal = ({ onCloseModal, newPost, setNewPost, onAddPost }: A
             value={newPost.userId}
             onChange={(e) => setNewPost({ ...newPost, userId: Number(e.target.value) })}
           />
-          <Button onClick={onAddPost}>게시물 추가</Button>
+          <Button onClick={handleAddPost}>게시물 추가</Button>
         </div>
       </DialogContent>
     </Dialog>

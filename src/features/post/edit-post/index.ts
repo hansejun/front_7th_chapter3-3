@@ -1,2 +1,1 @@
-export { EditPostModal } from "./modal.ui"
-export { useEditPost } from "./use-edit-post.hook"
+export { EditPostModalTrigger } from "./modal-trigger.ui"

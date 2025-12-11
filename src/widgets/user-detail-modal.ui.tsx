@@ -2,11 +2,11 @@ import { User } from "@entities/user"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dialog"
 import { BaseModalProps } from "@shared/store/modal/types"
 
-interface ViewUserModalProps extends BaseModalProps {
+interface UserDetailModalProps extends BaseModalProps {
   user: User
 }
 
-export const ViewUserModal = ({ onCloseModal, user }: ViewUserModalProps) => {
+export const UserDetailModal = ({ onCloseModal, user }: UserDetailModalProps) => {
   return (
     <Dialog open onOpenChange={onCloseModal}>
       <DialogContent>

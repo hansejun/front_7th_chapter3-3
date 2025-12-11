@@ -1,24 +1,16 @@
 import { Suspense, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@shared/ui/card"
 
-import { userService, type User } from "@entities/user"
 import { commentService, type Comment, CreateCommentRequestDto } from "@entities/comment"
-import { Post, usePostsSearchParams } from "@entities/post"
-import { AddPostButton } from "@features/post/add-post"
-import { ViewPostModal } from "@features/post/view-post"
-import { AddCommentModal } from "@features/comment/add-comment"
-import { EditCommentModal } from "@features/comment/edit-comment"
-import { ViewUserModal } from "@features/user/view-user"
+import { AddPostModalTrigger } from "@features/post/add-post"
+
 import { PostTable } from "./post-table"
-import { useModal } from "@shared/hooks/use-modal"
+
 import { PostSearchFilter } from "./post-search-filter"
 import { PaginationControls } from "./pagination-controls"
 import { useGetSuspendedPostsWithUser } from "./use-post-with-user.hook"
 
 export const PostsManagerPage = () => {
-  const { openModal } = useModal()
-  const { params } = usePostsSearchParams()
-
   // React Query로 posts 데이터 가져오기
   const { total } = useGetSuspendedPostsWithUser()
 
@@ -94,54 +86,12 @@ export const PostsManagerPage = () => {
     }
   }
 
-  // 게시물 상세 보기
-  const openPostDetail = (post: Post) => {
-    fetchComments(post.id)
-    openModal(ViewPostModal, {
-      post,
-      comments: comments[post.id] || [],
-      searchTerm: params.search,
-      onAddComment: (postId: number) => {
-        const newComment: CreateCommentRequestDto = { body: "", postId, userId: 1 }
-        openModal(AddCommentModal, {
-          comment: newComment,
-          onCommentChange: () => {},
-          onAdd: () => addComment(newComment),
-        })
-      },
-      onLikeComment: likeComment,
-      onEditComment: (comment: Comment) => {
-        let editedComment = { ...comment }
-        openModal(EditCommentModal, {
-          comment,
-          onCommentChange: (c: Comment) => {
-            editedComment = c
-          },
-          onUpdate: () => updateComment(editedComment),
-        })
-      },
-      onDeleteComment: deleteComment,
-    })
-  }
-
-  // 사용자 모달 열기
-  const openUserModal = async (user: User) => {
-    try {
-      const userData = await userService.getUserById(user.id)
-      openModal(ViewUserModal, {
-        user: userData,
-      })
-    } catch (error) {
-      console.error("사용자 정보 가져오기 오류:", error)
-    }
-  }
-
   return (
     <Card className="w-full max-w-6xl mx-auto">
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <span>게시물 관리자</span>
-          <AddPostButton />
+          <AddPostModalTrigger />
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -150,7 +100,7 @@ export const PostsManagerPage = () => {
           <PostSearchFilter />
 
           <Suspense fallback={<div className="flex justify-center p-4">로딩 중...</div>}>
-            <PostTable openUserModal={openUserModal} openPostDetail={openPostDetail} />
+            <PostTable />
           </Suspense>
 
           {/* 페이지네이션 */}

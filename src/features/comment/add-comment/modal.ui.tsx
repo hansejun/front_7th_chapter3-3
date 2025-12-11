@@ -1,16 +1,23 @@
-import { CreateCommentRequestDto } from "@entities/comment"
 import { Button } from "@shared/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dialog"
 import { Textarea } from "@shared/ui/textarea"
 import { BaseModalProps } from "@shared/store/modal/types"
+import { useState } from "react"
+import { CreateCommentRequestDto } from "@entities/comment"
 
 interface AddCommentModalProps extends BaseModalProps {
-  comment: CreateCommentRequestDto
-  onCommentChange: (comment: CreateCommentRequestDto) => void
-  onAdd: () => void
+  postId: number
 }
 
-export const AddCommentModal = ({ onCloseModal, comment, onCommentChange, onAdd }: AddCommentModalProps) => {
+export const AddCommentModal = ({ onCloseModal, postId }: AddCommentModalProps) => {
+  const [comment, setComment] = useState<CreateCommentRequestDto>({
+    body: "",
+    postId,
+    userId: 1,
+  })
+
+  const handleAddComment = () => {}
+
   return (
     <Dialog open onOpenChange={onCloseModal}>
       <DialogContent>
@@ -21,9 +28,9 @@ export const AddCommentModal = ({ onCloseModal, comment, onCommentChange, onAdd 
           <Textarea
             placeholder="댓글 내용"
             value={comment.body}
-            onChange={(e) => onCommentChange({ ...comment, body: e.target.value })}
+            onChange={(e) => setComment({ ...comment, body: e.target.value })}
           />
-          <Button onClick={onAdd}>댓글 추가</Button>
+          <Button onClick={handleAddComment}>댓글 추가</Button>
         </div>
       </DialogContent>
     </Dialog>

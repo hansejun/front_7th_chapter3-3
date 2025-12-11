@@ -1,1 +1,1 @@
-export { AddCommentModal } from "./modal.ui"
+export { AddCommentModalTrigger } from "./modal-trigger.ui"
