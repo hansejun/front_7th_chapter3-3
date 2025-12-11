@@ -1,6 +1,6 @@
 import { PaginatedData } from "@shared/model/response.interface"
 import type { PostDto, PostListResponseDto, TagDto } from "../api/post.dto"
-import type { Post, Tag } from "./post.interface"
+import type { Post, Tag } from "../model/post.interface"
 
 const toPost = (dto: PostDto): Post => ({
   id: dto.id,

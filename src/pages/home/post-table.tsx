@@ -1,14 +1,11 @@
-import { Post } from "@entities/post"
+import { Post, usePostsSearchParams } from "@entities/post"
 import { User } from "@entities/user"
 import { Button } from "@shared/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@shared/ui/table"
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
-import { PostsSearchParams } from "src/hooks/usePostsSearchParams"
 
 interface PropsType {
-  posts: (Post & { author: User })[]
-  params: PostsSearchParams
-  updateParams: (params: Partial<PostsSearchParams>) => void
+  posts: (Post & { author?: User })[]
   openUserModal: (user: User) => void
   openPostDetail: (post: Post) => void
   deletePost: (id: number) => void
@@ -32,13 +29,13 @@ const highlightText = (text: string, highlight: string) => {
 
 export const PostTable = ({
   posts,
-  params,
-  updateParams,
   openUserModal,
   openPostDetail,
   deletePost,
   onEditPost,
 }: PropsType) => {
+  const { params, updateParams } = usePostsSearchParams()
+
   return (
     <Table>
       <TableHeader>
@@ -78,7 +75,10 @@ export const PostTable = ({
               </div>
             </TableCell>
             <TableCell>
-              <div className="flex items-center space-x-2 cursor-pointer" onClick={() => openUserModal(post.author)}>
+              <div
+                className="flex items-center space-x-2 cursor-pointer"
+                onClick={() => post.author && openUserModal(post.author)}
+              >
                 <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
                 <span>{post.author?.username}</span>
               </div>

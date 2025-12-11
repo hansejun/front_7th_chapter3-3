@@ -1,6 +1,6 @@
 import { PaginatedData } from "@shared/model/response.interface"
 import type { CommentDto, CommentListResponseDto } from "../api/comment.dto"
-import type { Comment, CommentUser } from "./comment.interface"
+import type { Comment, CommentUser } from "../model/comment.interface"
 
 const toCommentUser = (dto: CommentDto["user"]): CommentUser => {
   if (!dto) {

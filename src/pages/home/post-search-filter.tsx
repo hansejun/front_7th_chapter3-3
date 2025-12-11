@@ -1,17 +1,15 @@
-import { Tag } from "@entities/post"
+import { Tag, usePostsSearchParams } from "@entities/post"
 import { Input } from "@shared/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@shared/ui/select"
 import { Search } from "lucide-react"
-import { PostsSearchParams } from "src/hooks/usePostsSearchParams"
 
 interface PropsType {
-  params: PostsSearchParams
-  updateParams: (params: Partial<PostsSearchParams>) => void
   searchPosts: () => void
   tags: Tag[]
 }
 
-export function PostSearchFilter({ params, updateParams, searchPosts, tags }: PropsType) {
+export function PostSearchFilter({ searchPosts, tags }: PropsType) {
+  const { params, updateParams } = usePostsSearchParams()
   return (
     <div className="flex gap-4">
       <div className="flex-1">

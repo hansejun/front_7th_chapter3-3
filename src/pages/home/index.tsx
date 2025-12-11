@@ -1,12 +1,18 @@
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { Plus } from "lucide-react"
 import { Button } from "@shared/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@shared/ui/card"
 
 import { userService, type User } from "@entities/user"
 import { commentService, type Comment, CreateCommentRequestDto } from "@entities/comment"
-import { CreatePostRequestDto, Post, postService, Tag } from "@entities/post"
-import { usePostsSearchParams } from "../../hooks/usePostsSearchParams"
+import {
+  CreatePostRequestDto,
+  Post,
+  postService,
+  Tag,
+  PostsSearchParamsProvider,
+  usePostsSearchParams,
+} from "@entities/post"
 import { AddPostModal } from "@features/post/add-post"
 import { EditPostModal } from "@features/post/edit-post"
 import { ViewPostModal } from "@features/post/view-post"
@@ -19,11 +25,11 @@ import { PostSearchFilter } from "./post-search-filter"
 import { PaginationControls } from "./pagination-controls"
 
 const PostsManager = () => {
-  const { params, updateParams } = usePostsSearchParams()
+  const { params } = usePostsSearchParams()
   const { openModal } = useModal()
 
   // 상태 관리
-  const [posts, setPosts] = useState<Post[]>([])
+  const [posts, setPosts] = useState<(Post & { author?: User })[]>([])
   const [total, setTotal] = useState<number>(0)
   const [newPost, setNewPost] = useState<CreatePostRequestDto>({ title: "", body: "", userId: 1 })
   const [loading, setLoading] = useState<boolean>(false)
@@ -285,16 +291,11 @@ const PostsManager = () => {
       <CardContent>
         <div className="flex flex-col gap-4">
           {/* 검색 및 필터 컨트롤 */}
-          <PostSearchFilter params={params} updateParams={updateParams} searchPosts={searchPosts} tags={tags} />
+          <PostSearchFilter searchPosts={searchPosts} tags={tags} />
 
-          {/* 게시물 테이블 */}
-          {loading ? (
-            <div className="flex justify-center p-4">로딩 중...</div>
-          ) : (
+          <Suspense fallback={<div className="flex justify-center p-4">로딩 중...</div>}>
             <PostTable
               posts={posts}
-              params={params}
-              updateParams={updateParams}
               openUserModal={openUserModal}
               openPostDetail={openPostDetail}
               deletePost={deletePost}
@@ -309,14 +310,22 @@ const PostsManager = () => {
                 })
               }}
             />
-          )}
+          </Suspense>
 
           {/* 페이지네이션 */}
-          <PaginationControls params={params} updateParams={updateParams} total={total} />
+          <PaginationControls total={total} />
         </div>
       </CardContent>
     </Card>
   )
 }
 
-export default PostsManager
+const PostsManagerWithProvider = () => {
+  return (
+    <PostsSearchParamsProvider>
+      <PostsManager />
+    </PostsSearchParamsProvider>
+  )
+}
+
+export default PostsManagerWithProvider

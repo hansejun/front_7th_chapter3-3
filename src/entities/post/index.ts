@@ -1,3 +1,5 @@
 export { postService } from "./api/post.service"
 export type { Post, PostReactions, Tag } from "./model/post.interface"
 export type { PostDto, TagDto, CreatePostRequestDto, UpdatePostRequestDto, PostListResponseDto } from "./api/post.dto"
+export { PostsSearchParamsProvider, usePostsSearchParams } from "./model/use-post-search-params.hook.ts"
+export type { PostsSearchParams } from "./model/use-post-search-params.hook.ts"

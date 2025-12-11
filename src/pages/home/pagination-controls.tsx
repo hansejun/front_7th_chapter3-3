@@ -1,14 +1,13 @@
 import { Button } from "@shared/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@shared/ui/select"
-import { PostsSearchParams } from "src/hooks/usePostsSearchParams"
+import { usePostsSearchParams } from "@entities/post"
 
 interface PropsType {
-  params: PostsSearchParams
-  updateParams: (params: Partial<PostsSearchParams>) => void
   total: number
 }
 
-export function PaginationControls({ params, updateParams, total }: PropsType) {
+export function PaginationControls({ total }: PropsType) {
+  const { params, updateParams } = usePostsSearchParams()
   return (
     <div className="flex justify-between items-center">
       <div className="flex items-center gap-2">
