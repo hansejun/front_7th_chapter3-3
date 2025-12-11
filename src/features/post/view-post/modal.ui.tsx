@@ -4,6 +4,7 @@ import { Button } from "@shared/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dialog"
 import { Edit2, Plus, ThumbsUp, Trash2 } from "lucide-react"
 import { BaseModalProps } from "@shared/store/modal/types"
+import { HighlightText } from "@shared/ui/highlight-text"
 
 interface ViewPostModalProps extends BaseModalProps {
   post: Post
@@ -16,7 +17,6 @@ interface ViewPostModalProps extends BaseModalProps {
 }
 
 export const ViewPostModal = ({
-  onCloseModal,
   post,
   comments,
   searchTerm,
@@ -24,30 +24,20 @@ export const ViewPostModal = ({
   onLikeComment,
   onEditComment,
   onDeleteComment,
+  onCloseModal,
 }: ViewPostModalProps) => {
-  // 하이라이트 함수
-  const highlightText = (text: string, highlight: string) => {
-    if (!text) return null
-    if (!highlight.trim()) {
-      return <span>{text}</span>
-    }
-    const regex = new RegExp(`(${highlight})`, "gi")
-    const parts = text.split(regex)
-    return (
-      <span>
-        {parts.map((part, i) => (regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>))}
-      </span>
-    )
-  }
-
   return (
     <Dialog open onOpenChange={onCloseModal}>
       <DialogContent className="max-w-3xl">
         <DialogHeader>
-          <DialogTitle>{highlightText(post.title, searchTerm)}</DialogTitle>
+          <DialogTitle>
+            <HighlightText text={post.title} highlight={searchTerm} />
+          </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
-          <p>{highlightText(post.body, searchTerm)}</p>
+          <p>
+            <HighlightText text={post.body} highlight={searchTerm} />
+          </p>
 
           {/* 댓글 섹션 */}
           <div className="mt-2">
@@ -63,7 +53,9 @@ export const ViewPostModal = ({
                 <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
                   <div className="flex items-center space-x-2 overflow-hidden">
                     <span className="font-medium truncate">{comment.user.username}:</span>
-                    <span className="truncate">{highlightText(comment.body, searchTerm)}</span>
+                    <span className="truncate">
+                      <HighlightText text={comment.body} highlight={searchTerm} />
+                    </span>
                   </div>
                   <div className="flex items-center space-x-1">
                     <Button variant="ghost" size="sm" onClick={() => onLikeComment(comment.id, post.id)}>

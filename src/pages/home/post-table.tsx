@@ -3,38 +3,34 @@ import { User } from "@entities/user"
 import { Button } from "@shared/ui/button"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@shared/ui/table"
 import { Edit2, MessageSquare, ThumbsDown, ThumbsUp, Trash2 } from "lucide-react"
+import { useGetSuspendedPostsWithUser } from "./use-post-with-user.hook"
+import { HighlightText } from "@shared/ui/highlight-text"
+import { useDeletePost } from "@features/post/delete-post"
+import { EditPostModal } from "@features/post/edit-post"
+import { useModal } from "@shared/hooks/use-modal"
 
 interface PropsType {
-  posts: (Post & { author?: User })[]
   openUserModal: (user: User) => void
   openPostDetail: (post: Post) => void
-  deletePost: (id: number) => void
-  onEditPost: (post: Post) => void
 }
 
-// 하이라이트 함수 추가
-const highlightText = (text: string, highlight: string) => {
-  if (!text) return null
-  if (!highlight.trim()) {
-    return <span>{text}</span>
-  }
-  const regex = new RegExp(`(${highlight})`, "gi")
-  const parts = text.split(regex)
-  return (
-    <span>
-      {parts.map((part, i) => (regex.test(part) ? <mark key={i}>{part}</mark> : <span key={i}>{part}</span>))}
-    </span>
-  )
-}
-
-export const PostTable = ({
-  posts,
-  openUserModal,
-  openPostDetail,
-  deletePost,
-  onEditPost,
-}: PropsType) => {
+export const PostTable = ({ openUserModal, openPostDetail }: PropsType) => {
   const { params, updateParams } = usePostsSearchParams()
+  const { posts } = useGetSuspendedPostsWithUser()
+  const deletePostMutation = useDeletePost()
+  const { openModal } = useModal()
+
+  const handleDeletePost = async (id: number) => {
+    try {
+      await deletePostMutation.mutateAsync(id)
+    } catch (error) {
+      console.error("게시물 삭제 오류:", error)
+    }
+  }
+
+  const handleEditPost = (post: Post) => {
+    openModal(EditPostModal, { post })
+  }
 
   return (
     <Table>
@@ -53,7 +49,9 @@ export const PostTable = ({
             <TableCell>{post.id}</TableCell>
             <TableCell>
               <div className="space-y-1">
-                <div>{highlightText(post.title, params.search)}</div>
+                <div>
+                  <HighlightText text={post.title} highlight={params.search} />
+                </div>
 
                 <div className="flex flex-wrap gap-1">
                   {post.tags?.map((tag) => (
@@ -96,10 +94,10 @@ export const PostTable = ({
                 <Button variant="ghost" size="sm" onClick={() => openPostDetail(post)}>
                   <MessageSquare className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => onEditPost(post)}>
+                <Button variant="ghost" size="sm" onClick={() => handleEditPost(post)}>
                   <Edit2 className="w-4 h-4" />
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => deletePost(post.id)}>
+                <Button variant="ghost" size="sm" onClick={() => handleDeletePost(post.id)}>
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </div>

@@ -1,0 +1,1 @@
+export { useDeletePost } from "./use-delete-post.hook"

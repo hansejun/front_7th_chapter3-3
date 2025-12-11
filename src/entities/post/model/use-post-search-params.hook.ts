@@ -1,14 +1,5 @@
-import { createSearchParamsProvider, type SearchParamValue } from "@shared/store/search-params"
-
-export interface PostsSearchParams {
-  [key: string]: SearchParamValue
-  skip: number
-  limit: number
-  search: string
-  sortBy: string
-  sortOrder: "asc" | "desc"
-  tag: string
-}
+import { createSearchParamsProvider } from "@shared/store/search-params"
+import { PostsSearchParams } from "./post.interface"
 
 const { Provider: PostsSearchParamsProvider, useSearchParams: usePostsSearchParams } =
   createSearchParamsProvider<PostsSearchParams>({

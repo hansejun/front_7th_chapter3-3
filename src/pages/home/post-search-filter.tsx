@@ -1,15 +1,14 @@
-import { Tag, usePostsSearchParams } from "@entities/post"
+import { postQueries, usePostsSearchParams } from "@entities/post"
 import { Input } from "@shared/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@shared/ui/select"
+import { useQuery } from "@tanstack/react-query"
 import { Search } from "lucide-react"
 
-interface PropsType {
-  searchPosts: () => void
-  tags: Tag[]
-}
-
-export function PostSearchFilter({ searchPosts, tags }: PropsType) {
+export function PostSearchFilter() {
   const { params, updateParams } = usePostsSearchParams()
+
+  const { data: tags = [] } = useQuery(postQueries.tags())
+
   return (
     <div className="flex gap-4">
       <div className="flex-1">
@@ -20,7 +19,6 @@ export function PostSearchFilter({ searchPosts, tags }: PropsType) {
             className="pl-8"
             value={params.search}
             onChange={(e) => updateParams({ search: e.target.value })}
-            onKeyPress={(e) => e.key === "Enter" && searchPosts()}
           />
         </div>
       </div>
