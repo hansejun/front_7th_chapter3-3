@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dia
 import { Textarea } from "@shared/ui/textarea"
 import { BaseModalProps } from "@shared/store/modal/types"
 import { useState } from "react"
+import { useEditComment } from "./use-edit-comment.hook"
 
 interface EditCommentModalProps extends BaseModalProps {
   comment: Comment
@@ -15,8 +16,11 @@ export const EditCommentModal = ({ onCloseModal, comment }: EditCommentModalProp
     body: comment.body,
   })
 
+  const { mutate: updateComment } = useEditComment(comment.postId)
+
   const handleUpdateComment = () => {
-    // updateComment(editedComment)
+    updateComment(editedComment)
+    onCloseModal()
   }
   return (
     <Dialog open onOpenChange={onCloseModal}>
@@ -27,7 +31,7 @@ export const EditCommentModal = ({ onCloseModal, comment }: EditCommentModalProp
         <div className="space-y-4">
           <Textarea
             placeholder="댓글 내용"
-            value={comment.body || ""}
+            value={editedComment.body || ""}
             onChange={(e) => setEditedComment({ ...editedComment, body: e.target.value })}
           />
           <Button onClick={handleUpdateComment}>댓글 업데이트</Button>

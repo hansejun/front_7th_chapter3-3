@@ -1,28 +1,15 @@
-import { Post, usePostsSearchParams } from "@entities/post"
-
-import { Button } from "@shared/ui/button"
+import { usePostsSearchParams } from "@entities/post"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@shared/ui/table"
-import { MessageSquare, ThumbsDown, ThumbsUp } from "lucide-react"
-import { useGetSuspendedPostsWithUser } from "./use-post-with-user.hook"
+import { ThumbsDown, ThumbsUp } from "lucide-react"
 import { HighlightText } from "@shared/ui/highlight-text"
-import { EditPostModalTrigger } from "@features/post/edit-post/modal-trigger.ui"
-import { DeletePostButton } from "@features/post/delete-post"
-import { User } from "@entities/user"
-import { useModal } from "@shared/hooks/use-modal"
-import { UserDetailModal } from "@widgets/user-detail-modal.ui"
-import { PostDetailModal } from "@widgets/post-detail-modal.ui"
+import { EditPostModalTrigger } from "@features/post/post-update"
+import { DeletePostButton } from "@features/post/post-delete"
+import { UserDetailModalTrigger } from "@features/user/user-view"
+import { PostDetailModalTrigger } from "@features/post/post-view"
+import { PostWithAuthor } from "@entities/post/model/post.interface"
 
-export const PostTable = () => {
+export const PostTable = ({ posts }: { posts: PostWithAuthor[] }) => {
   const { params, updateParams } = usePostsSearchParams()
-  const { posts } = useGetSuspendedPostsWithUser()
-  const { openModal } = useModal()
-
-  const openUserDetailModal = (user: User) => {
-    openModal(UserDetailModal, { user })
-  }
-  const openPostDetailModal = (post: Post) => {
-    openModal(PostDetailModal, { post })
-  }
 
   return (
     <Table>
@@ -64,15 +51,7 @@ export const PostTable = () => {
                 </div>
               </div>
             </TableCell>
-            <TableCell>
-              <div
-                className="flex items-center space-x-2 cursor-pointer"
-                onClick={() => post.author && openUserDetailModal(post.author)}
-              >
-                <img src={post.author?.image} alt={post.author?.username} className="w-8 h-8 rounded-full" />
-                <span>{post.author?.username}</span>
-              </div>
-            </TableCell>
+            <TableCell>{post.author && <UserDetailModalTrigger user={post.author} />}</TableCell>
             <TableCell>
               <div className="flex items-center gap-2">
                 <ThumbsUp className="w-4 h-4" />
@@ -83,9 +62,7 @@ export const PostTable = () => {
             </TableCell>
             <TableCell>
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm" onClick={() => openPostDetailModal(post)}>
-                  <MessageSquare className="w-4 h-4" />
-                </Button>
+                <PostDetailModalTrigger post={post} />
                 <EditPostModalTrigger post={post} />
                 <DeletePostButton postId={post.id} />
               </div>

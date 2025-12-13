@@ -23,7 +23,7 @@ export interface Tag {
 }
 
 export interface PostWithAuthor extends Post {
-  author: User
+  author: User | null
 }
 
 export interface PostsSearchParams {

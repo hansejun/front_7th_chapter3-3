@@ -17,14 +17,8 @@ export const AddPostModal = ({ onCloseModal }: BaseModalProps) => {
   const { mutate: addPost } = useAddPost()
 
   const handleAddPost = async () => {
-    addPost(newPost, {
-      onSuccess: () => {
-        onCloseModal()
-      },
-      onError: (error) => {
-        console.error("게시물 추가 오류:", error)
-      },
-    })
+    addPost(newPost)
+    onCloseModal()
   }
 
   return (

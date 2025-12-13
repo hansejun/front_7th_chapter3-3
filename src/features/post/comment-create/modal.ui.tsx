@@ -4,6 +4,7 @@ import { Textarea } from "@shared/ui/textarea"
 import { BaseModalProps } from "@shared/store/modal/types"
 import { useState } from "react"
 import { CreateCommentRequestDto } from "@entities/comment"
+import { useAddComment } from "./use-add-comment.hook"
 
 interface AddCommentModalProps extends BaseModalProps {
   postId: number
@@ -16,7 +17,12 @@ export const AddCommentModal = ({ onCloseModal, postId }: AddCommentModalProps) 
     userId: 1,
   })
 
-  const handleAddComment = () => {}
+  const { mutate: addComment } = useAddComment(postId)
+
+  const handleAddComment = () => {
+    addComment(comment)
+    onCloseModal()
+  }
 
   return (
     <Dialog open onOpenChange={onCloseModal}>

@@ -12,6 +12,6 @@ export interface BaseModalProps {
  */
 export interface ModalState {
   id: string
-  component: ComponentType<any>
-  props: Record<string, any>
+  component: ComponentType<BaseModalProps>
+  props: BaseModalProps & Record<string, unknown>
 }

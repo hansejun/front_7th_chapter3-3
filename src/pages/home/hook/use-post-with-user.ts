@@ -1,10 +1,11 @@
 import { postQueries, usePostsSearchParams } from "@entities/post"
 import { userQueries } from "@entities/user"
-import { useSuspenseQueries } from "@tanstack/react-query"
+import { useQueries } from "@tanstack/react-query"
 
-export function useGetSuspendedPostsWithUser() {
+export function useGetPostsWithUser() {
   const { params } = usePostsSearchParams()
-  const [postsQuery, usersQuery] = useSuspenseQueries({
+
+  const [postsQuery, usersQuery] = useQueries({
     queries: [
       // 통합된 쿼리 - search, tag, 페이지네이션 모두 지원
       postQueries.list({
@@ -24,7 +25,7 @@ export function useGetSuspendedPostsWithUser() {
   return {
     posts: posts.map((post) => ({
       ...post,
-      author: users.find((user) => user.id === post.userId),
+      author: users.find((user) => user.id === post.userId) || null,
     })),
     total,
   }

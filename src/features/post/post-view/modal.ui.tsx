@@ -4,10 +4,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dia
 import { BaseModalProps } from "@shared/store/modal/types"
 import { HighlightText } from "@shared/ui/highlight-text"
 import { useQuery } from "@tanstack/react-query"
-import { AddCommentModalTrigger } from "@features/comment/add-comment"
-import { LikeCommentButton } from "@features/comment/like-comment"
-import { EditCommentModalTrigger } from "@features/comment/edit-comment"
-import { DeleteCommentButton } from "@features/comment/delete-comment"
+import { AddCommentModalTrigger } from "@features/post/comment-create"
+import { LikeCommentButton } from "@features/post/comment-like"
+import { EditCommentModalTrigger } from "@features/post/comment-update"
+import { DeleteCommentButton } from "@features/post/comment-delete"
 
 interface PostDetailModalProps extends BaseModalProps {
   post: Post
@@ -41,7 +41,7 @@ export const PostDetailModal = ({ post, onCloseModal }: PostDetailModalProps) =>
               {comments?.map((comment) => (
                 <div key={comment.id} className="flex items-center justify-between text-sm border-b pb-1">
                   <div className="flex items-center space-x-2 overflow-hidden">
-                    <span className="font-medium truncate">{comment.user.username}:</span>
+                    <span className="font-medium truncate">{comment?.user?.username ?? "anonymous"}:</span>
                     <span className="truncate">
                       <HighlightText text={comment.body} highlight={params.search} />
                     </span>

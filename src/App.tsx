@@ -1,9 +1,10 @@
 import { BrowserRouter as Router } from "react-router-dom"
-import Header from "@widgets/header.ui"
-import Footer from "@widgets/footer.ui"
+
 import { PostsManagerPage } from "@pages/home"
 import { ModalRoot } from "@shared/store/modal/modal-root"
 import { PostsSearchParamsProvider } from "@entities/post"
+import Header from "@widgets/header.ui"
+import Footer from "@widgets/footer.ui"
 
 const App = () => {
   return (

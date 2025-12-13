@@ -8,4 +8,4 @@ export type {
 } from "./api/comment.dto"
 export { commentMapper } from "./api/comment.mapper"
 export { commentService } from "./api/comment.service"
-export { commentQueries } from "./api/comment.queries"
+export { commentQueries, commentKeys } from "./api/comment.queries"
