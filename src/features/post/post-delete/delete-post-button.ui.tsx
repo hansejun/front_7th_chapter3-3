@@ -15,7 +15,7 @@ export function DeletePostButton({ postId }: DeletePostButtonProps) {
       onSuccess: () => {
         toast.success("게시물이 삭제되었습니다")
       },
-      onError: (error) => {
+      onError: () => {
         toast.error("게시물 삭제 실패")
       },
     })

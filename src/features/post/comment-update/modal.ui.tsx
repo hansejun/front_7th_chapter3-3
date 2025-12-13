@@ -25,7 +25,7 @@ export const EditCommentModal = ({ onCloseModal, comment }: EditCommentModalProp
         toast.success("댓글이 수정되었습니다")
         onCloseModal()
       },
-      onError: (error) => {
+      onError: () => {
         toast.error("댓글 수정 실패")
       },
     })

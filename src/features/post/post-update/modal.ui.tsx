@@ -24,7 +24,7 @@ export const EditPostModal = ({ onCloseModal, post }: EditPostModalProps) => {
           toast.success("게시물이 수정되었습니다")
           onCloseModal()
         },
-        onError: (error) => {
+        onError: () => {
           toast.error("게시물 수정 실패")
         },
       },

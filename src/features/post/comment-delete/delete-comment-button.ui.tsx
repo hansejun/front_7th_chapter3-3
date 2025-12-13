@@ -16,7 +16,7 @@ export const DeleteCommentButton = ({ commentId, postId }: DeleteCommentButtonPr
       onSuccess: () => {
         toast.success("댓글이 삭제되었습니다")
       },
-      onError: (error) => {
+      onError: () => {
         toast.error("댓글 삭제 실패")
       },
     })

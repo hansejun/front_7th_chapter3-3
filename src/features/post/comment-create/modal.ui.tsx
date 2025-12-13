@@ -26,7 +26,7 @@ export const AddCommentModal = ({ onCloseModal, postId }: AddCommentModalProps) 
         toast.success("댓글이 추가되었습니다")
         onCloseModal()
       },
-      onError: (error) => {
+      onError: () => {
         toast.error("댓글 추가 실패")
       },
     })

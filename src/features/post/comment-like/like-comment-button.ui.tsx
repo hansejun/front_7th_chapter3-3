@@ -21,7 +21,7 @@ export const LikeCommentButton = ({ postId, comment }: LikeCommentButtonProps) =
         onSuccess: () => {
           toast.success("댓글 좋아요 성공")
         },
-        onError: (error) => {
+        onError: () => {
           toast.error("댓글 좋아요 실패")
         },
       },
