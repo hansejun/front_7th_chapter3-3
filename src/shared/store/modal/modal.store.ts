@@ -4,10 +4,7 @@ import { BaseModalProps, ModalState } from "./types"
 
 interface ModalStore {
   modals: ModalState[]
-  openModal: <P extends BaseModalProps>(
-    component: ComponentType<P>,
-    props: Omit<P, "onCloseModal">
-  ) => string
+  openModal: <P extends BaseModalProps>(component: ComponentType<P>, props: Omit<P, "onCloseModal">) => string
   closeModal: (id?: string) => void
   closeAll: () => void
 }
@@ -26,11 +23,11 @@ export const useModalStore = create<ModalStore>((set, get) => ({
         ...state.modals,
         {
           id,
-          component,
+          component: component as ComponentType<BaseModalProps>,
           props: {
             ...props,
             onCloseModal: () => get().closeModal(id),
-          },
+          } as BaseModalProps & Record<string, unknown>,
         },
       ],
     }))
