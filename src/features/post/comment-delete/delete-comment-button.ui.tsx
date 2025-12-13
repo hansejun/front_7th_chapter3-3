@@ -1,5 +1,6 @@
 import { Button } from "@shared/ui/button"
 import { Trash2 } from "lucide-react"
+import { toast } from "sonner"
 import { useDeleteComment } from "./delete-comment.hook"
 
 interface DeleteCommentButtonProps {
@@ -11,7 +12,14 @@ export const DeleteCommentButton = ({ commentId, postId }: DeleteCommentButtonPr
   const { mutate: deleteComment } = useDeleteComment(postId)
 
   const handleDeleteComment = () => {
-    deleteComment(commentId)
+    deleteComment(commentId, {
+      onSuccess: () => {
+        toast.success("댓글이 삭제되었습니다")
+      },
+      onError: (error) => {
+        toast.error("댓글 삭제 실패")
+      },
+    })
   }
   return (
     <Button variant="ghost" size="sm" onClick={handleDeleteComment}>

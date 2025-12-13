@@ -1,5 +1,6 @@
 import { Button } from "@shared/ui/button"
 import { Trash2 } from "lucide-react"
+import { toast } from "sonner"
 import { useDeletePost } from "./use-delete-post.hook"
 
 interface DeletePostButtonProps {
@@ -11,8 +12,11 @@ export function DeletePostButton({ postId }: DeletePostButtonProps) {
 
   const handleDeletePost = async () => {
     deletePost(postId, {
+      onSuccess: () => {
+        toast.success("게시물이 삭제되었습니다")
+      },
       onError: (error) => {
-        console.error("게시물 삭제 오류:", error)
+        toast.error("게시물 삭제 실패")
       },
     })
   }

@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { toast } from "sonner"
 import { Post } from "@entities/post"
 import { Button } from "@shared/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dialog"
@@ -20,10 +21,11 @@ export const EditPostModal = ({ onCloseModal, post }: EditPostModalProps) => {
       { id: editedPost.id, data: editedPost },
       {
         onSuccess: () => {
+          toast.success("게시물이 수정되었습니다")
           onCloseModal()
         },
         onError: (error) => {
-          console.error("게시물 업데이트 오류:", error)
+          toast.error("게시물 수정 실패")
         },
       },
     )

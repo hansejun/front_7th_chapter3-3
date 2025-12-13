@@ -4,11 +4,13 @@ import "./index.css"
 import App from "./App.tsx"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import { TanstackQueryProvider } from "@app/index.ts"
+import { Toaster } from "sonner"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <TanstackQueryProvider>
       <App />
+      <Toaster richColors />
       <ReactQueryDevtools />
     </TanstackQueryProvider>
   </StrictMode>,

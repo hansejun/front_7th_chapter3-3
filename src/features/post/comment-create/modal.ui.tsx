@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dia
 import { Textarea } from "@shared/ui/textarea"
 import { BaseModalProps } from "@shared/store/modal/types"
 import { useState } from "react"
+import { toast } from "sonner"
 import { CreateCommentRequestDto } from "@entities/comment"
 import { useAddComment } from "./use-add-comment.hook"
 
@@ -20,8 +21,15 @@ export const AddCommentModal = ({ onCloseModal, postId }: AddCommentModalProps) 
   const { mutate: addComment } = useAddComment(postId)
 
   const handleAddComment = () => {
-    addComment(comment)
-    onCloseModal()
+    addComment(comment, {
+      onSuccess: () => {
+        toast.success("댓글이 추가되었습니다")
+        onCloseModal()
+      },
+      onError: (error) => {
+        toast.error("댓글 추가 실패")
+      },
+    })
   }
 
   return (

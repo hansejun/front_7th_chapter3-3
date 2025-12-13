@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@shared/ui/dia
 import { Textarea } from "@shared/ui/textarea"
 import { BaseModalProps } from "@shared/store/modal/types"
 import { useState } from "react"
+import { toast } from "sonner"
 import { useEditComment } from "./use-edit-comment.hook"
 
 interface EditCommentModalProps extends BaseModalProps {
@@ -19,8 +20,15 @@ export const EditCommentModal = ({ onCloseModal, comment }: EditCommentModalProp
   const { mutate: updateComment } = useEditComment(comment.postId)
 
   const handleUpdateComment = () => {
-    updateComment(editedComment)
-    onCloseModal()
+    updateComment(editedComment, {
+      onSuccess: () => {
+        toast.success("댓글이 수정되었습니다")
+        onCloseModal()
+      },
+      onError: (error) => {
+        toast.error("댓글 수정 실패")
+      },
+    })
   }
   return (
     <Dialog open onOpenChange={onCloseModal}>

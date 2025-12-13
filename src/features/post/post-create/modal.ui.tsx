@@ -5,6 +5,7 @@ import { Input } from "@shared/ui/input"
 import { Textarea } from "@shared/ui/textarea"
 import { BaseModalProps } from "@shared/store/modal/types"
 import { useState } from "react"
+import { toast } from "sonner"
 import { useAddPost } from "./use-add-post.hook"
 
 export const AddPostModal = ({ onCloseModal }: BaseModalProps) => {
@@ -17,7 +18,14 @@ export const AddPostModal = ({ onCloseModal }: BaseModalProps) => {
   const { mutate: addPost } = useAddPost()
 
   const handleAddPost = async () => {
-    addPost(newPost)
+    addPost(newPost, {
+      onSuccess: () => {
+        toast.success("게시물이 추가되었습니다")
+      },
+      onError: () => {
+        toast.error("게시물 추가 실패")
+      },
+    })
     onCloseModal()
   }
 
