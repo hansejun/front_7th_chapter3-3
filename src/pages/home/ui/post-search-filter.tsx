@@ -3,11 +3,20 @@ import { Input } from "@shared/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@shared/ui/select"
 import { useQuery } from "@tanstack/react-query"
 import { Search } from "lucide-react"
+import { useDebounce } from "@shared/hooks/use-debounce"
+import { useEffect, useState } from "react"
 
 export function PostSearchFilter() {
   const { params, updateParams } = usePostsSearchParams()
+  const [searchInput, setSearchInput] = useState(params.search)
+  const debouncedSearch = useDebounce(searchInput, 300)
 
   const { data: tags = [] } = useQuery(postQueries.tags())
+
+  // debounced 값이 변경될 때만 URL 파라미터 업데이트
+  useEffect(() => {
+    updateParams({ search: debouncedSearch })
+  }, [debouncedSearch, updateParams])
 
   return (
     <div className="flex gap-4">
@@ -17,8 +26,8 @@ export function PostSearchFilter() {
           <Input
             placeholder="게시물 검색..."
             className="pl-8"
-            value={params.search}
-            onChange={(e) => updateParams({ search: e.target.value })}
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
           />
         </div>
       </div>
