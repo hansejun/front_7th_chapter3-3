@@ -15,7 +15,7 @@ export function PostSearchFilter() {
 
   // debounced 값이 변경될 때만 URL 파라미터 업데이트
   useEffect(() => {
-    updateParams({ search: debouncedSearch })
+    updateParams({ search: debouncedSearch, skip: 0 })
   }, [debouncedSearch, updateParams])
 
   return (
@@ -34,7 +34,7 @@ export function PostSearchFilter() {
       <Select
         value={params.tag}
         onValueChange={(value) => {
-          updateParams({ tag: value })
+          updateParams({ tag: value, skip: 0 })
         }}
       >
         <SelectTrigger className="w-[180px]">
@@ -49,7 +49,7 @@ export function PostSearchFilter() {
           ))}
         </SelectContent>
       </Select>
-      <Select value={params.sortBy} onValueChange={(value) => updateParams({ sortBy: value })}>
+      <Select value={params.sortBy} onValueChange={(value) => updateParams({ sortBy: value, skip: 0 })}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="정렬 기준" />
         </SelectTrigger>
@@ -60,7 +60,7 @@ export function PostSearchFilter() {
           <SelectItem value="reactions">반응</SelectItem>
         </SelectContent>
       </Select>
-      <Select value={params.sortOrder} onValueChange={(value) => updateParams({ sortOrder: value as "asc" | "desc" })}>
+      <Select value={params.sortOrder} onValueChange={(value) => updateParams({ sortOrder: value as "asc" | "desc", skip: 0 })}>
         <SelectTrigger className="w-[180px]">
           <SelectValue placeholder="정렬 순서" />
         </SelectTrigger>

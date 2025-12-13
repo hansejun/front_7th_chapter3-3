@@ -12,7 +12,7 @@ export function PaginationControls({ total }: PropsType) {
     <div className="flex justify-between items-center">
       <div className="flex items-center gap-2">
         <span>표시</span>
-        <Select value={params.limit.toString()} onValueChange={(value) => updateParams({ limit: Number(value) })}>
+        <Select value={params.limit.toString()} onValueChange={(value) => updateParams({ limit: Number(value), skip: 0 })}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="10" />
           </SelectTrigger>
